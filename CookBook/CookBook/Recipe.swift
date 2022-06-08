@@ -40,6 +40,10 @@ class Recipe: NSObject, NSCoding{
         self.time = time
         self.calories = calories
     }
+    func toString()->String{
+        return self.ingredients+"\n"+self.instructions
+        
+    }
     
     func encode(with coder: NSCoder) {
         coder.encode(name, forKey: "name")

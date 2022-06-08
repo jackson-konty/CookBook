@@ -100,12 +100,12 @@ class SeeRecipeViewController: UIViewController {
                                     oldCalories.isEditable = false
                                     delegate = UIApplication.shared.delegate as? AppDelegate
                                     sessionModel = delegate?.sessionModel
-                                    if let myRecipeModel = self.sessionModel{
+                                    if let sessionModel = self.sessionModel{
                                         let minutes = Int(oldMinutes.text) ?? 0
                                         let hours  = Int(oldHours.text) ?? 0
                                         let calories = Int(oldCalories.text) ?? 0
                                         let time = (hours*60)+minutes
-                                        myRecipeModel.editRecipe(index: recipeIndex, name: oldRecipeName.text, ingredients: oldIngredients.text, instructions: oldDirections.text, time: time, calories: calories)
+                                        sessionModel.editRecipe(index: recipeIndex, name: oldRecipeName.text, ingredients: oldIngredients.text, instructions: oldDirections.text, time: time, calories: calories)
                                     }
                                 }
                             }
@@ -172,7 +172,13 @@ extension SeeRecipeViewController: MFMessageComposeViewControllerDelegate {
     @IBAction func sendMessage(_ sender: Any) {
         let messageVC = MFMessageComposeViewController()
         messageVC.messageComposeDelegate = self
-        messageVC.body = "Check out this new recipe!\n"
+        if let sessionModel = self.sessionModel{
+            messageVC.body = "Check out this new recipe!\n"+sessionModel.getRecipe(index: self.recipeIndex).toString()
+        }
+        else{
+            messageVC.body = "Check out this new recipe!\n"
+        }
+        
         messageVC.recipients = ["New Message"]
         if MFMessageComposeViewController.canSendText() {
                     self.present(messageVC, animated: true, completion: nil)
